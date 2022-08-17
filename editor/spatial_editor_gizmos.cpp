@@ -1352,6 +1352,7 @@ void CameraSpatialGizmoPlugin::commit_handle(EditorSpatialGizmo *p_gizmo, int p_
 
 void CameraSpatialGizmoPlugin::redraw(EditorSpatialGizmo *p_gizmo) {
 	Camera *camera = Object::cast_to<Camera>(p_gizmo->get_spatial_node());
+	Transform custom_projection = camera->get_custom_projection().affine_inverse();
 
 	p_gizmo->clear();
 
@@ -1362,24 +1363,24 @@ void CameraSpatialGizmoPlugin::redraw(EditorSpatialGizmo *p_gizmo) {
 
 #define ADD_TRIANGLE(m_a, m_b, m_c) \
 	{                               \
-		lines.push_back(m_a);       \
-		lines.push_back(m_b);       \
-		lines.push_back(m_b);       \
-		lines.push_back(m_c);       \
-		lines.push_back(m_c);       \
-		lines.push_back(m_a);       \
+		lines.push_back(custom_projection.xform(m_a));       \
+		lines.push_back(custom_projection.xform(m_b));       \
+		lines.push_back(custom_projection.xform(m_b));       \
+		lines.push_back(custom_projection.xform(m_c));       \
+		lines.push_back(custom_projection.xform(m_c));       \
+		lines.push_back(custom_projection.xform(m_a));       \
 	}
 
 #define ADD_QUAD(m_a, m_b, m_c, m_d) \
 	{                                \
-		lines.push_back(m_a);        \
-		lines.push_back(m_b);        \
-		lines.push_back(m_b);        \
-		lines.push_back(m_c);        \
-		lines.push_back(m_c);        \
-		lines.push_back(m_d);        \
-		lines.push_back(m_d);        \
-		lines.push_back(m_a);        \
+		lines.push_back(custom_projection.xform(m_a));        \
+		lines.push_back(custom_projection.xform(m_b));        \
+		lines.push_back(custom_projection.xform(m_b));        \
+		lines.push_back(custom_projection.xform(m_c));        \
+		lines.push_back(custom_projection.xform(m_c));        \
+		lines.push_back(custom_projection.xform(m_d));        \
+		lines.push_back(custom_projection.xform(m_d));        \
+		lines.push_back(custom_projection.xform(m_a));        \
 	}
 
 	switch (camera->get_projection()) {

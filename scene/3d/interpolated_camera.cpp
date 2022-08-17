@@ -61,10 +61,10 @@ void InterpolatedCamera::_notification(int p_what) {
 
 						if (cam->get_projection() == PROJECTION_ORTHOGONAL) {
 							float size = Math::lerp(get_size(), cam->get_size(), delta);
-							set_orthogonal(size, new_near, new_far);
+							set_orthogonal(size, new_near, new_far, get_custom_projection());
 						} else {
 							float fov = Math::lerp(get_fov(), cam->get_fov(), delta);
-							set_perspective(fov, new_near, new_far);
+							set_perspective(fov, new_near, new_far, get_custom_projection());
 						}
 					}
 				}

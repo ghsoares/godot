@@ -54,25 +54,27 @@ RID VisualServerScene::camera_create() {
 	return camera_owner.make_rid(camera);
 }
 
-void VisualServerScene::camera_set_perspective(RID p_camera, float p_fovy_degrees, float p_z_near, float p_z_far) {
+void VisualServerScene::camera_set_perspective(RID p_camera, float p_fovy_degrees, float p_z_near, float p_z_far, const Transform &p_custom_projection) {
 	Camera *camera = camera_owner.get(p_camera);
 	ERR_FAIL_COND(!camera);
 	camera->type = Camera::PERSPECTIVE;
 	camera->fov = p_fovy_degrees;
 	camera->znear = p_z_near;
 	camera->zfar = p_z_far;
+	camera->custom_projection = p_custom_projection;
 }
 
-void VisualServerScene::camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far) {
+void VisualServerScene::camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far, const Transform &p_custom_projection) {
 	Camera *camera = camera_owner.get(p_camera);
 	ERR_FAIL_COND(!camera);
 	camera->type = Camera::ORTHOGONAL;
 	camera->size = p_size;
 	camera->znear = p_z_near;
 	camera->zfar = p_z_far;
+	camera->custom_projection = p_custom_projection;
 }
 
-void VisualServerScene::camera_set_frustum(RID p_camera, float p_size, Vector2 p_offset, float p_z_near, float p_z_far) {
+void VisualServerScene::camera_set_frustum(RID p_camera, float p_size, Vector2 p_offset, float p_z_near, float p_z_far, const Transform &p_custom_projection) {
 	Camera *camera = camera_owner.get(p_camera);
 	ERR_FAIL_COND(!camera);
 	camera->type = Camera::FRUSTUM;
@@ -80,6 +82,7 @@ void VisualServerScene::camera_set_frustum(RID p_camera, float p_size, Vector2 p
 	camera->offset = p_offset;
 	camera->znear = p_z_near;
 	camera->zfar = p_z_far;
+	camera->custom_projection = p_custom_projection;
 }
 
 void VisualServerScene::camera_reset_physics_interpolation(RID p_camera) {
@@ -2887,6 +2890,9 @@ void VisualServerScene::render_camera(RID p_camera, RID p_scenario, Size2 p_view
 			ortho = false;
 		} break;
 	}
+
+	/* STEP 2 - APPLY CUSTOM TRANSFORM */
+	camera_matrix = camera_matrix * CameraMatrix(camera->custom_projection);
 
 	Transform camera_transform = _interpolation_data.interpolation_enabled ? camera->get_transform_interpolated() : camera->transform;
 

@@ -371,9 +371,9 @@ public:
 	/* CAMERA API */
 
 	FUNCRID(camera)
-	FUNC4(camera_set_perspective, RID, float, float, float)
-	FUNC4(camera_set_orthogonal, RID, float, float, float)
-	FUNC5(camera_set_frustum, RID, float, Vector2, float, float)
+	FUNC5(camera_set_perspective, RID, float, float, float, const Transform &)
+	FUNC5(camera_set_orthogonal, RID, float, float, float, const Transform &)
+	FUNC6(camera_set_frustum, RID, float, Vector2, float, float, const Transform &)
 	FUNC2(camera_set_transform, RID, const Transform &)
 	FUNC2(camera_set_interpolated, RID, bool)
 	FUNC1(camera_reset_physics_interpolation, RID)

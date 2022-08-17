@@ -68,6 +68,7 @@ private:
 	float fov;
 	float size;
 	Vector2 frustum_offset;
+	Transform custom_projection;
 	float near, far;
 	float v_offset;
 	float h_offset;
@@ -108,9 +109,9 @@ public:
 		NOTIFICATION_LOST_CURRENT = 51
 	};
 
-	void set_perspective(float p_fovy_degrees, float p_z_near, float p_z_far);
-	void set_orthogonal(float p_size, float p_z_near, float p_z_far);
-	void set_frustum(float p_size, Vector2 p_offset, float p_z_near, float p_z_far);
+	void set_perspective(float p_fovy_degrees, float p_z_near, float p_z_far, const Transform &p_custom_projection = Transform());
+	void set_orthogonal(float p_size, float p_z_near, float p_z_far, const Transform &p_custom_projection = Transform());
+	void set_frustum(float p_size, Vector2 p_offset, float p_z_near, float p_z_far, const Transform &p_custom_projection = Transform());
 	void set_projection(Camera::Projection p_mode);
 
 	void make_current();
@@ -125,6 +126,7 @@ public:
 	float get_zfar() const;
 	float get_znear() const;
 	Vector2 get_frustum_offset() const;
+	Transform get_custom_projection() const;
 
 	Projection get_projection() const;
 
@@ -133,6 +135,7 @@ public:
 	void set_zfar(float p_zfar);
 	void set_znear(float p_znear);
 	void set_frustum_offset(Vector2 p_offset);
+	void set_custom_projection(const Transform &p_proj);
 
 	virtual Transform get_camera_transform() const;
 

@@ -76,6 +76,7 @@
 			<argument index="2" name="offset" type="Vector2" />
 			<argument index="3" name="z_near" type="float" />
 			<argument index="4" name="z_far" type="float" />
+			<argument index="5" name="custom_projection" type="Transform" default="Transform2D( 1, 0, 0, 1, 0, 0 )"/>
 			<description>
 				Sets camera to use frustum projection. This mode allows adjusting the [code]offset[/code] argument to create "tilted frustum" effects.
 			</description>
@@ -94,6 +95,7 @@
 			<argument index="1" name="size" type="float" />
 			<argument index="2" name="z_near" type="float" />
 			<argument index="3" name="z_far" type="float" />
+			<argument index="4" name="custom_projection" type="Transform" default="Transform2D( 1, 0, 0, 1, 0, 0 )"/>
 			<description>
 				Sets camera to use orthogonal projection, also known as orthographic projection. Objects remain the same size on the screen no matter how far away they are.
 			</description>
@@ -104,6 +106,7 @@
 			<argument index="1" name="fovy_degrees" type="float" />
 			<argument index="2" name="z_near" type="float" />
 			<argument index="3" name="z_far" type="float" />
+			<argument index="4" name="custom_projection" type="Transform" default="Transform2D( 1, 0, 0, 1, 0, 0 )"/>
 			<description>
 				Sets camera to use perspective projection. Objects on the screen becomes smaller when they are far away.
 			</description>

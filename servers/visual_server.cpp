@@ -2060,9 +2060,9 @@ void VisualServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("particles_set_emission_transform", "particles", "transform"), &VisualServer::particles_set_emission_transform);
 
 	ClassDB::bind_method(D_METHOD("camera_create"), &VisualServer::camera_create);
-	ClassDB::bind_method(D_METHOD("camera_set_perspective", "camera", "fovy_degrees", "z_near", "z_far"), &VisualServer::camera_set_perspective);
-	ClassDB::bind_method(D_METHOD("camera_set_orthogonal", "camera", "size", "z_near", "z_far"), &VisualServer::camera_set_orthogonal);
-	ClassDB::bind_method(D_METHOD("camera_set_frustum", "camera", "size", "offset", "z_near", "z_far"), &VisualServer::camera_set_frustum);
+	ClassDB::bind_method(D_METHOD("camera_set_perspective", "camera", "fovy_degrees", "z_near", "z_far", "custom_projection"), &VisualServer::camera_set_perspective, DEFVAL(Transform()));
+	ClassDB::bind_method(D_METHOD("camera_set_orthogonal", "camera", "size", "z_near", "z_far", "custom_projection"), &VisualServer::camera_set_orthogonal, DEFVAL(Transform()));
+	ClassDB::bind_method(D_METHOD("camera_set_frustum", "camera", "size", "offset", "z_near", "z_far", "custom_projection"), &VisualServer::camera_set_frustum, DEFVAL(Transform()));
 	ClassDB::bind_method(D_METHOD("camera_set_transform", "camera", "transform"), &VisualServer::camera_set_transform);
 	ClassDB::bind_method(D_METHOD("camera_set_interpolated", "camera", "interpolated"), &VisualServer::camera_set_interpolated);
 	ClassDB::bind_method(D_METHOD("camera_reset_physics_interpolation", "camera"), &VisualServer::camera_reset_physics_interpolation);
@@ -2550,8 +2550,8 @@ void VisualServer::_canvas_item_add_style_box(RID p_item, const Rect2 &p_rect, c
 	//canvas_item_add_style_box(p_item,p_rect,p_source,p_texture,Vector2(p_margins[0],p_margins[1]),Vector2(p_margins[2],p_margins[3]),true,p_modulate);
 }
 
-void VisualServer::_camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far) {
-	camera_set_orthogonal(p_camera, p_size, p_z_near, p_z_far);
+void VisualServer::_camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far, const Transform &p_custom_projection) {
+	camera_set_orthogonal(p_camera, p_size, p_z_near, p_z_far, p_custom_projection);
 }
 
 void VisualServer::mesh_add_surface_from_mesh_data(RID p_mesh, const Geometry::MeshData &p_mesh_data) {
