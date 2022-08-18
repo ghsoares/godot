@@ -1,0 +1,2 @@
+void register_collision_spatial_2d_types();
+void unregister_collision_spatial_2d_types();
