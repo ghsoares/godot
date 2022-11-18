@@ -73,6 +73,9 @@ public:
 	virtual void set_angular_velocity(const Vector3 &p_velocity);
 	virtual Vector3 get_angular_velocity() const;
 
+	virtual void set_inertia_override(const Vector3 &p_inertia);
+	virtual Vector3 get_inertia_override() const;
+
 	virtual void set_transform(const Transform &p_transform);
 	virtual Transform get_transform() const;
 
@@ -84,6 +87,8 @@ public:
 	virtual void apply_central_impulse(const Vector3 &p_impulse);
 	virtual void apply_impulse(const Vector3 &p_pos, const Vector3 &p_impulse);
 	virtual void apply_torque_impulse(const Vector3 &p_impulse);
+
+	virtual void update_transform_dependant();
 
 	virtual void set_sleep_state(bool p_enable);
 	virtual bool is_sleeping() const;

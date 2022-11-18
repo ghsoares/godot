@@ -46,6 +46,7 @@ class BodySW : public CollisionObjectSW {
 
 	Vector3 biased_linear_velocity;
 	Vector3 biased_angular_velocity;
+	Vector3 user_inertia;
 	real_t mass;
 	real_t bounce;
 	real_t friction;
@@ -215,6 +216,9 @@ public:
 	_FORCE_INLINE_ void set_angular_velocity(const Vector3 &p_velocity) { angular_velocity = p_velocity; }
 	_FORCE_INLINE_ Vector3 get_angular_velocity() const { return angular_velocity; }
 
+	_FORCE_INLINE_ void set_inertia_override(const Vector3 &p_inertia) {user_inertia = p_inertia;}
+	_FORCE_INLINE_ Vector3 get_inertia_override() const {return user_inertia;}
+
 	_FORCE_INLINE_ const Vector3 &get_biased_linear_velocity() const { return biased_linear_velocity; }
 	_FORCE_INLINE_ const Vector3 &get_biased_angular_velocity() const { return biased_angular_velocity; }
 
@@ -257,6 +261,10 @@ public:
 
 	_FORCE_INLINE_ void add_torque(const Vector3 &p_torque) {
 		applied_torque += p_torque;
+	}
+
+	_FORCE_INLINE_ void update_transform_dependant() {
+		_update_transform_dependant();
 	}
 
 	void set_active(bool p_active);
@@ -407,6 +415,11 @@ public:
 	}
 	virtual Vector3 get_angular_velocity() const { return body->get_angular_velocity(); }
 
+	virtual void set_inertia_override(const Vector3 &p_inertia) {
+		body->set_inertia_override(p_inertia);
+	}
+	virtual Vector3 get_inertia_override() const { return body->get_inertia_override(); }
+
 	virtual void set_transform(const Transform &p_transform) { body->set_state(PhysicsServer::BODY_STATE_TRANSFORM, p_transform); }
 	virtual Transform get_transform() const { return body->get_transform(); }
 
@@ -435,6 +448,10 @@ public:
 	virtual void apply_torque_impulse(const Vector3 &p_j) {
 		body->wakeup();
 		body->apply_torque_impulse(p_j);
+	}
+
+	virtual void update_transform_dependant() {
+		body->update_transform_dependant();
 	}
 
 	virtual void set_sleep_state(bool p_enable) { body->set_active(!p_enable); }
