@@ -40,13 +40,24 @@ void BodySW::_update_inertia() {
 
 void BodySW::_update_transform_dependant() {
 	center_of_mass = get_transform().basis.xform(center_of_mass_local);
-	principal_inertia_axes = get_transform().basis * principal_inertia_axes_local;
+	bool inertia_override = user_inertia.x > 0 && user_inertia.y > 0 && user_inertia.z > 0;
+
+	if (inertia_override) {
+		principal_inertia_axes = get_transform().basis;
+	} else {
+		principal_inertia_axes = get_transform().basis * principal_inertia_axes_local;
+	}
 
 	// update inertia tensor
 	Basis tb = principal_inertia_axes;
 	Basis tbt = tb.transposed();
 	Basis diag;
-	diag.scale(_inv_inertia);
+	// use inertia override
+	if (inertia_override) {
+		diag.scale(user_inertia.inverse());
+	} else {
+		diag.scale(_inv_inertia);
+	}
 	_inv_inertia_tensor = tb * diag * tbt;
 }
 
@@ -764,6 +775,7 @@ BodySW::BodySW() :
 	mode = PhysicsServer::BODY_MODE_RIGID;
 	active = true;
 
+	user_inertia = Vector3();
 	mass = 1;
 	kinematic_safe_margin = 0.001;
 	//_inv_inertia=Transform();

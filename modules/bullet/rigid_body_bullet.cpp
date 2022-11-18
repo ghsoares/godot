@@ -102,6 +102,15 @@ Vector3 BulletPhysicsDirectBodyState::get_angular_velocity() const {
 	return body->get_angular_velocity();
 }
 
+void BulletPhysicsDirectBodyState::set_inertia_override(const Vector3 &p_inertia) {
+	WARN_PRINT_ONCE("Custom inertia aren't supported for bullet physics.");
+}
+
+Vector3 BulletPhysicsDirectBodyState::get_inertia_override() const {
+	WARN_PRINT_ONCE("Custom inertia aren't supported for bullet physics.");
+	return Vector3();
+}
+
 void BulletPhysicsDirectBodyState::set_transform(const Transform &p_transform) {
 	body->set_transform(p_transform);
 }
@@ -142,6 +151,10 @@ void BulletPhysicsDirectBodyState::apply_impulse(const Vector3 &p_pos, const Vec
 
 void BulletPhysicsDirectBodyState::apply_torque_impulse(const Vector3 &p_impulse) {
 	body->apply_torque_impulse(p_impulse);
+}
+
+void BulletPhysicsDirectBodyState::update_transform_dependant() {
+	WARN_PRINT_ONCE("update_transform_dependant aren't implemented for bullet physics.");
 }
 
 void BulletPhysicsDirectBodyState::set_sleep_state(bool p_enable) {

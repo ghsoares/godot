@@ -82,12 +82,16 @@ void PhysicsDirectBodyState::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_inverse_mass"), &PhysicsDirectBodyState::get_inverse_mass);
 	ClassDB::bind_method(D_METHOD("get_inverse_inertia"), &PhysicsDirectBodyState::get_inverse_inertia);
+	ClassDB::bind_method(D_METHOD("get_inverse_inertia_tensor"), &PhysicsDirectBodyState::get_inverse_inertia_tensor);
 
 	ClassDB::bind_method(D_METHOD("set_linear_velocity", "velocity"), &PhysicsDirectBodyState::set_linear_velocity);
 	ClassDB::bind_method(D_METHOD("get_linear_velocity"), &PhysicsDirectBodyState::get_linear_velocity);
 
 	ClassDB::bind_method(D_METHOD("set_angular_velocity", "velocity"), &PhysicsDirectBodyState::set_angular_velocity);
 	ClassDB::bind_method(D_METHOD("get_angular_velocity"), &PhysicsDirectBodyState::get_angular_velocity);
+
+	ClassDB::bind_method(D_METHOD("set_inertia_override", "inertia"), &PhysicsDirectBodyState::set_inertia_override);
+	ClassDB::bind_method(D_METHOD("get_inertia_override"), &PhysicsDirectBodyState::get_inertia_override);
 
 	ClassDB::bind_method(D_METHOD("set_transform", "transform"), &PhysicsDirectBodyState::set_transform);
 	ClassDB::bind_method(D_METHOD("get_transform"), &PhysicsDirectBodyState::get_transform);
@@ -100,6 +104,8 @@ void PhysicsDirectBodyState::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("apply_central_impulse", "j"), &PhysicsDirectBodyState::apply_central_impulse);
 	ClassDB::bind_method(D_METHOD("apply_impulse", "position", "j"), &PhysicsDirectBodyState::apply_impulse);
 	ClassDB::bind_method(D_METHOD("apply_torque_impulse", "j"), &PhysicsDirectBodyState::apply_torque_impulse);
+
+	ClassDB::bind_method(D_METHOD("update_transform_dependant"), &PhysicsDirectBodyState::update_transform_dependant);
 
 	ClassDB::bind_method(D_METHOD("set_sleep_state", "enabled"), &PhysicsDirectBodyState::set_sleep_state);
 	ClassDB::bind_method(D_METHOD("is_sleeping"), &PhysicsDirectBodyState::is_sleeping);
@@ -128,8 +134,10 @@ void PhysicsDirectBodyState::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "total_gravity"), "", "get_total_gravity");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "center_of_mass"), "", "get_center_of_mass");
 	ADD_PROPERTY(PropertyInfo(Variant::BASIS, "principal_inertia_axes"), "", "get_principal_inertia_axes");
+	ADD_PROPERTY(PropertyInfo(Variant::BASIS, "inverse_inertia_tensor"), "", "get_inverse_inertia_tensor");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "angular_velocity"), "set_angular_velocity", "get_angular_velocity");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "linear_velocity"), "set_linear_velocity", "get_linear_velocity");
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "inertia_override"), "set_inertia_override", "get_inertia_override");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "sleeping"), "set_sleep_state", "is_sleeping");
 	ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM2D, "transform"), "set_transform", "get_transform");
 }
