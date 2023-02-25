@@ -112,6 +112,7 @@
 			<return type="void" />
 			<argument index="0" name="camera" type="RID" />
 			<argument index="1" name="transform" type="Transform" />
+			<argument index="2" name="orthonormalize" type="bool" />
 			<description>
 				Sets [Transform] of camera.
 			</description>

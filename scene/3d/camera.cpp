@@ -158,7 +158,9 @@ void Camera::_notification(int p_what) {
 }
 
 Transform Camera::get_camera_transform() const {
-	Transform tr = get_global_transform().orthonormalized();
+	Transform tr = get_global_transform();
+	if (orthonormalize_transform)
+		tr.orthonormalize();
 	tr.origin += tr.basis.get_axis(1) * v_offset;
 	tr.origin += tr.basis.get_axis(0) * h_offset;
 	return tr;
@@ -444,6 +446,15 @@ Camera::KeepAspect Camera::get_keep_aspect_mode() const {
 	return keep_aspect;
 }
 
+void Camera::set_orthonormalize_transform(bool p_enable) {
+	orthonormalize_transform = p_enable;
+	_change_notify();
+}
+
+bool Camera::get_orthonormalize_transform() const {
+	return orthonormalize_transform;
+}
+
 void Camera::set_doppler_tracking(DopplerTracking p_tracking) {
 	if (doppler_tracking == p_tracking) {
 		return;
@@ -500,6 +511,8 @@ void Camera::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_environment"), &Camera::get_environment);
 	ClassDB::bind_method(D_METHOD("set_keep_aspect_mode", "mode"), &Camera::set_keep_aspect_mode);
 	ClassDB::bind_method(D_METHOD("get_keep_aspect_mode"), &Camera::get_keep_aspect_mode);
+	ClassDB::bind_method(D_METHOD("set_orthonormalize_transform", "mode"), &Camera::set_orthonormalize_transform);
+	ClassDB::bind_method(D_METHOD("get_orthonormalize_transform"), &Camera::get_orthonormalize_transform);
 	ClassDB::bind_method(D_METHOD("set_doppler_tracking", "mode"), &Camera::set_doppler_tracking);
 	ClassDB::bind_method(D_METHOD("get_doppler_tracking"), &Camera::get_doppler_tracking);
 	ClassDB::bind_method(D_METHOD("get_frustum"), &Camera::get_frustum);
@@ -523,6 +536,7 @@ void Camera::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "frustum_offset"), "set_frustum_offset", "get_frustum_offset");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "near", PROPERTY_HINT_EXP_RANGE, "0.01,8192,0.01,or_greater"), "set_znear", "get_znear");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "far", PROPERTY_HINT_EXP_RANGE, "0.1,8192,0.1,or_greater"), "set_zfar", "get_zfar");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "orthonormalize_transform"), "set_orthonormalize_transform", "get_orthonormalize_transform");
 
 	BIND_ENUM_CONSTANT(PROJECTION_PERSPECTIVE);
 	BIND_ENUM_CONSTANT(PROJECTION_ORTHOGONAL);
@@ -665,6 +679,7 @@ Camera::Camera() {
 	mode = PROJECTION_PERSPECTIVE;
 	set_perspective(70.0, 0.05, 100.0);
 	keep_aspect = KEEP_HEIGHT;
+	orthonormalize_transform = true;
 	layers = 0xfffff;
 	v_offset = 0;
 	h_offset = 0;

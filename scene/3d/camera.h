@@ -72,6 +72,7 @@ private:
 	float v_offset;
 	float h_offset;
 	KeepAspect keep_aspect;
+	bool orthonormalize_transform;
 
 	RID camera;
 	RID scenario_id;
@@ -158,6 +159,9 @@ public:
 
 	void set_keep_aspect_mode(KeepAspect p_aspect);
 	KeepAspect get_keep_aspect_mode() const;
+
+	void set_orthonormalize_transform(bool p_enable);
+	bool get_orthonormalize_transform() const;
 
 	void set_v_offset(float p_offset);
 	float get_v_offset() const;

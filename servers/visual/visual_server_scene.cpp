@@ -97,11 +97,14 @@ void VisualServerScene::camera_set_interpolated(RID p_camera, bool p_interpolate
 	camera->interpolated = p_interpolated;
 }
 
-void VisualServerScene::camera_set_transform(RID p_camera, const Transform &p_transform) {
+void VisualServerScene::camera_set_transform(RID p_camera, const Transform &p_transform, bool p_orthonormalize) {
 	Camera *camera = camera_owner.get(p_camera);
 	ERR_FAIL_COND(!camera);
 
-	camera->transform = p_transform.orthonormalized();
+	if (p_orthonormalize)
+		camera->transform = p_transform.orthonormalized();
+	else
+		camera->transform = p_transform;
 
 	if (_interpolation_data.interpolation_enabled) {
 		if (camera->interpolated) {
