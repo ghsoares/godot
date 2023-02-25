@@ -76,7 +76,6 @@ public:
 		float znear, zfar;
 		float size;
 		Vector2 offset;
-		Transform custom_projection;
 		uint32_t visible_layers;
 		RID env;
 
@@ -102,7 +101,6 @@ public:
 			zfar = 100;
 			size = 1.0;
 			offset = Vector2();
-			custom_projection = Transform();
 			vaspect = false;
 			previous_room_id_hint = -1;
 			interpolated = true;
@@ -114,9 +112,9 @@ public:
 	mutable RID_Owner<Camera> camera_owner;
 
 	virtual RID camera_create();
-	virtual void camera_set_perspective(RID p_camera, float p_fovy_degrees, float p_z_near, float p_z_far, const Transform &p_custom_projection);
-	virtual void camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far, const Transform &p_custom_projection);
-	virtual void camera_set_frustum(RID p_camera, float p_size, Vector2 p_offset, float p_z_near, float p_z_far, const Transform &p_custom_projection);
+	virtual void camera_set_perspective(RID p_camera, float p_fovy_degrees, float p_z_near, float p_z_far);
+	virtual void camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far);
+	virtual void camera_set_frustum(RID p_camera, float p_size, Vector2 p_offset, float p_z_near, float p_z_far);
 	virtual void camera_set_transform(RID p_camera, const Transform &p_transform);
 	virtual void camera_set_interpolated(RID p_camera, bool p_interpolated);
 	virtual void camera_reset_physics_interpolation(RID p_camera);

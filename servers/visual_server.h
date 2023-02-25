@@ -52,7 +52,7 @@ class VisualServer : public Object {
 	bool force_shader_fallbacks = false;
 #endif
 
-	void _camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far, const Transform &p_custom_projection);
+	void _camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far);
 	void _canvas_item_add_style_box(RID p_item, const Rect2 &p_rect, const Rect2 &p_source, RID p_texture, const Vector<float> &p_margins, const Color &p_modulate = Color(1, 1, 1));
 	Array _get_array_from_surface(uint32_t p_format, PoolVector<uint8_t> p_vertex_data, int p_vertex_len, PoolVector<uint8_t> p_index_data, int p_index_len) const;
 
@@ -624,9 +624,9 @@ public:
 	/* CAMERA API */
 
 	virtual RID camera_create() = 0;
-	virtual void camera_set_perspective(RID p_camera, float p_fovy_degrees, float p_z_near, float p_z_far, const Transform &p_custom_projection = Transform()) = 0;
-	virtual void camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far, const Transform &p_custom_projection = Transform()) = 0;
-	virtual void camera_set_frustum(RID p_camera, float p_size, Vector2 p_offset, float p_z_near, float p_z_far, const Transform &p_custom_projection = Transform()) = 0;
+	virtual void camera_set_perspective(RID p_camera, float p_fovy_degrees, float p_z_near, float p_z_far) = 0;
+	virtual void camera_set_orthogonal(RID p_camera, float p_size, float p_z_near, float p_z_far) = 0;
+	virtual void camera_set_frustum(RID p_camera, float p_size, Vector2 p_offset, float p_z_near, float p_z_far) = 0;
 	virtual void camera_set_transform(RID p_camera, const Transform &p_transform) = 0;
 	virtual void camera_set_interpolated(RID p_camera, bool p_interpolated) = 0;
 	virtual void camera_reset_physics_interpolation(RID p_camera) = 0;
