@@ -78,13 +78,13 @@ class CollisionObjectSpatial2D : public Spatial {
 protected:
 	CollisionObjectSpatial2D(RID p_rid, bool p_area);
 
-	Ref<World2D> CollisionObjectSpatial2D::get_world_2d() const;
+	Ref<World2D> get_world_2d() const;
 
-	Transform2D CollisionObjectSpatial2D::get_transform_2d() const;
-	Transform2D CollisionObjectSpatial2D::get_global_transform_2d() const;
+	Transform2D get_transform_2d() const;
+	Transform2D get_global_transform_2d() const;
 
-	void CollisionObjectSpatial2D::set_transform_2d(const Transform2D &transform);
-	void CollisionObjectSpatial2D::set_global_transform_2d(const Transform2D &transform);
+	void set_transform_2d(const Transform2D &transform);
+	void set_global_transform_2d(const Transform2D &transform);
 
 	void _notification(int p_what);
 	static void _bind_methods();
