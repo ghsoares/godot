@@ -128,6 +128,16 @@
 				Sets the environment used by this camera. Equivalent to [member Camera3D.environment].
 			</description>
 		</method>
+		<method name="camera_set_custom">
+			<return type="void" />
+			<param index="0" name="camera" type="RID" />
+			<param index="1" name="projection" type="Projection" />
+			<param index="2" name="z_near" type="float" />
+			<param index="3" name="z_far" type="float" />
+			<description>
+				Sets camera to use custom projection. This mode allows setting any arbitrary custom projection.
+			</description>
+		</method>
 		<method name="camera_set_frustum">
 			<return type="void" />
 			<param index="0" name="camera" type="RID" />

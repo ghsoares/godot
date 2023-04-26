@@ -1943,6 +1943,91 @@ void Camera3DGizmoPlugin::redraw(EditorNode3DGizmo *p_gizmo) {
 			Vector3 tup(0, up.y + hsize / 2, side.z);
 			ADD_TRIANGLE(tup + offset, side + up + offset, nside + up + offset);
 		} break;
+
+		case Camera3D::PROJECTION_CUSTOM: {
+			float hsize = 0.5;
+
+			// Vector3 right(hsize * size_factor.x, 0, 0);
+			// Vector3 up(0, hsize * size_factor.y, 0);
+			// Vector3 back(0, 0, -1.0);
+			// Vector3 front(0, 0, 0);
+
+			Projection cam = camera->get_custom_projection().inverse();
+
+			// 8 corners of a cube, will be projected by camera projection
+			Vector3 c000(-hsize * size_factor.x, -hsize * size_factor.y, -1.0);
+			Vector3 c100( hsize * size_factor.x, -hsize * size_factor.y, -1.0);
+			Vector3 c010(-hsize * size_factor.x,  hsize * size_factor.y, -1.0);
+			Vector3 c110( hsize * size_factor.x,  hsize * size_factor.y, -1.0);
+			Vector3 c001(-hsize * size_factor.x, -hsize * size_factor.y,  0.0);
+			Vector3 c101( hsize * size_factor.x, -hsize * size_factor.y,  0.0);
+			Vector3 c011(-hsize * size_factor.x,  hsize * size_factor.y,  0.0);
+			Vector3 c111( hsize * size_factor.x,  hsize * size_factor.y,  0.0);
+
+			// Project using a Vector4
+			Vector4 _c000 = cam.xform(Vector4(c000.x, c000.y, c000.z, 1.0));
+			Vector4 _c100 = cam.xform(Vector4(c100.x, c100.y, c100.z, 1.0));
+			Vector4 _c010 = cam.xform(Vector4(c010.x, c010.y, c010.z, 1.0));
+			Vector4 _c110 = cam.xform(Vector4(c110.x, c110.y, c110.z, 1.0));
+			Vector4 _c001 = cam.xform(Vector4(c001.x, c001.y, c001.z, 1.0));
+			Vector4 _c101 = cam.xform(Vector4(c101.x, c101.y, c101.z, 1.0));
+			Vector4 _c011 = cam.xform(Vector4(c011.x, c011.y, c011.z, 1.0));
+			Vector4 _c111 = cam.xform(Vector4(c111.x, c111.y, c111.z, 1.0));
+
+			// Convert back into Vector3
+			c000 = Vector3(_c000.x, _c000.y, _c000.z);
+			c100 = Vector3(_c100.x, _c100.y, _c100.z);
+			c010 = Vector3(_c010.x, _c010.y, _c010.z);
+			c110 = Vector3(_c110.x, _c110.y, _c110.z);
+			c001 = Vector3(_c001.x, _c001.y, _c001.z);
+			c101 = Vector3(_c101.x, _c101.y, _c101.z);
+			c011 = Vector3(_c011.x, _c011.y, _c011.z);
+			c111 = Vector3(_c111.x, _c111.y, _c111.z);
+
+			// Add four sides
+			ADD_QUAD(c000, c010, c011, c001) // Left
+			ADD_QUAD(c100, c110, c111, c101) // Right
+			ADD_QUAD(c010, c011, c111, c110) // Up
+			ADD_QUAD(c000, c001, c101, c100) // Down
+
+			/*
+			float size = camera->get_size();
+
+			float hsize = size * 0.5;
+			Vector3 right(hsize * size_factor.x, 0, 0);
+			Vector3 up(0, hsize * size_factor.y, 0);
+			Vector3 back(0, 0, -1.0);
+			Vector3 front(0, 0, 0);
+
+			ADD_QUAD(-up - right, -up + right, up + right, up - right);
+			ADD_QUAD(-up - right + back, -up + right + back, up + right + back, up - right + back);
+			ADD_QUAD(up + right, up + right + back, up - right + back, up - right);
+			ADD_QUAD(-up + right, -up + right + back, -up - right + back, -up - right);
+
+			handles.push_back(right + back);
+
+			right.x = MIN(right.x, hsize * 0.25);
+			Vector3 tup(0, up.y + hsize / 2, back.z);
+			ADD_TRIANGLE(tup, right + up + back, -right + up + back);
+			*/			
+
+			/*const float hsize = Math::sin(Math::deg_to_rad(fov));
+			const float depth = -Math::cos(Math::deg_to_rad(fov));
+			Vector3 side = Vector3(hsize * size_factor.x, 0, depth);
+			Vector3 nside = Vector3(-side.x, side.y, side.z);
+			Vector3 up = Vector3(0, hsize * size_factor.y, 0);
+
+			ADD_TRIANGLE(Vector3(), side + up, side - up);
+			ADD_TRIANGLE(Vector3(), nside + up, nside - up);
+			ADD_TRIANGLE(Vector3(), side + up, nside + up);
+			ADD_TRIANGLE(Vector3(), side - up, nside - up);
+
+			handles.push_back(side);
+			side.x = MIN(side.x, hsize * 0.25);
+			nside.x = -side.x;
+			Vector3 tup(0, up.y + hsize / 2, side.z);
+			ADD_TRIANGLE(tup, side + up, nside + up);*/
+		} break;
 	}
 
 #undef ADD_TRIANGLE
