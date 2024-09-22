@@ -75,6 +75,9 @@ private:
 	real_t h_offset = 0.0;
 	KeepAspect keep_aspect = KEEP_HEIGHT;
 
+	bool use_custom_projection = false;
+	Projection custom_projection = Projection();
+
 	RID camera;
 	RID scenario_id;
 
@@ -125,6 +128,8 @@ public:
 	void clear_current(bool p_enable_next = true);
 	void set_current(bool p_enabled);
 	bool is_current() const;
+	void set_use_custom_projection(bool p_enabled);
+	bool is_using_custom_projection() const;
 
 	RID get_camera() const;
 
@@ -133,6 +138,7 @@ public:
 	real_t get_far() const;
 	real_t get_near() const;
 	Vector2 get_frustum_offset() const;
+	Projection get_custom_projection() const;
 
 	ProjectionType get_projection() const;
 
@@ -141,6 +147,7 @@ public:
 	void set_far(real_t p_far);
 	void set_near(real_t p_near);
 	void set_frustum_offset(Vector2 p_offset);
+	void set_custom_projection(Projection p_projection);
 
 	virtual Transform3D get_camera_transform() const;
 	virtual Projection get_camera_projection() const;

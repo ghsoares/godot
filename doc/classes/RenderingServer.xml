@@ -189,6 +189,14 @@
 				If [code]true[/code], preserves the horizontal aspect ratio which is equivalent to [constant Camera3D.KEEP_WIDTH]. If [code]false[/code], preserves the vertical aspect ratio which is equivalent to [constant Camera3D.KEEP_HEIGHT].
 			</description>
 		</method>
+		<method name="camera_set_custom_projection">
+			<return type="void" />
+			<param index="0" name="camera" type="RID" />
+			<param index="1" name="projection" type="Projection" />
+			<description>
+				Sets a custom [Projection] matrix for the camera, will be applied to the camera's current projection.
+			</description>
+		</method>
 		<method name="canvas_create">
 			<return type="RID" />
 			<description>

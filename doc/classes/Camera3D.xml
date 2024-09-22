@@ -199,6 +199,12 @@
 		<member name="keep_aspect" type="int" setter="set_keep_aspect_mode" getter="get_keep_aspect_mode" enum="Camera3D.KeepAspect" default="1">
 			The axis to lock during [member fov]/[member size] adjustments. Can be either [constant KEEP_WIDTH] or [constant KEEP_HEIGHT].
 		</member>
+		<member name="use_custom_projection" type="bool" setter="set_use_custom_projection" getter="is_using_custom_projection" default="false">
+			If [code]true[/code] the [member custom_projection] matrix will be applied on top of this camera's projection matrix.
+		</member>
+		<member name="custom_projection" type="Projection" setter="set_custom_projection" getter="get_custom_projection" default="Projection()">
+			The [Projection] matrix applied on top of the camera's projection matrix.
+		</member>
 		<member name="near" type="float" setter="set_near" getter="get_near" default="0.05">
 			The distance to the near culling boundary for this camera relative to its local Z axis. Lower values allow the camera to see objects more up close to its origin, at the cost of lower precision across the [i]entire[/i] range. Values lower than the default can lead to increased Z-fighting.
 		</member>

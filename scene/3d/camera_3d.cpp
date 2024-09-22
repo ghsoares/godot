@@ -293,6 +293,19 @@ bool Camera3D::is_current() const {
 	}
 }
 
+void Camera3D::set_use_custom_projection(bool p_enabled) {
+	use_custom_projection = p_enabled;
+	if (use_custom_projection) {
+		RenderingServer::get_singleton()->camera_set_custom_projection(camera, custom_projection);
+	} else {
+		RenderingServer::get_singleton()->camera_set_custom_projection(camera, Projection());
+	}
+}
+
+bool Camera3D::is_using_custom_projection() const {
+	return use_custom_projection;
+}
+
 Vector3 Camera3D::project_ray_normal(const Point2 &p_pos) const {
 	Vector3 ray = project_local_ray_normal(p_pos);
 	return get_camera_transform().basis.xform(ray).normalized();
@@ -522,6 +535,8 @@ void Camera3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("clear_current", "enable_next"), &Camera3D::clear_current, DEFVAL(true));
 	ClassDB::bind_method(D_METHOD("set_current", "enabled"), &Camera3D::set_current);
 	ClassDB::bind_method(D_METHOD("is_current"), &Camera3D::is_current);
+	ClassDB::bind_method(D_METHOD("set_use_custom_projection", "enabled"), &Camera3D::set_use_custom_projection);
+	ClassDB::bind_method(D_METHOD("is_using_custom_projection"), &Camera3D::is_using_custom_projection);
 	ClassDB::bind_method(D_METHOD("get_camera_transform"), &Camera3D::get_camera_transform);
 	ClassDB::bind_method(D_METHOD("get_camera_projection"), &Camera3D::get_camera_projection);
 	ClassDB::bind_method(D_METHOD("get_fov"), &Camera3D::get_fov);
@@ -529,11 +544,13 @@ void Camera3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_size"), &Camera3D::get_size);
 	ClassDB::bind_method(D_METHOD("get_far"), &Camera3D::get_far);
 	ClassDB::bind_method(D_METHOD("get_near"), &Camera3D::get_near);
+	ClassDB::bind_method(D_METHOD("get_custom_projection"), &Camera3D::get_custom_projection);
 	ClassDB::bind_method(D_METHOD("set_fov", "fov"), &Camera3D::set_fov);
 	ClassDB::bind_method(D_METHOD("set_frustum_offset", "offset"), &Camera3D::set_frustum_offset);
 	ClassDB::bind_method(D_METHOD("set_size", "size"), &Camera3D::set_size);
 	ClassDB::bind_method(D_METHOD("set_far", "far"), &Camera3D::set_far);
 	ClassDB::bind_method(D_METHOD("set_near", "near"), &Camera3D::set_near);
+	ClassDB::bind_method(D_METHOD("set_custom_projection", "projection"), &Camera3D::set_custom_projection);
 	ClassDB::bind_method(D_METHOD("get_projection"), &Camera3D::get_projection);
 	ClassDB::bind_method(D_METHOD("set_projection", "mode"), &Camera3D::set_projection);
 	ClassDB::bind_method(D_METHOD("set_h_offset", "offset"), &Camera3D::set_h_offset);
@@ -572,11 +589,13 @@ void Camera3D::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "doppler_tracking", PROPERTY_HINT_ENUM, "Disabled,Idle,Physics"), "set_doppler_tracking", "get_doppler_tracking");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "projection", PROPERTY_HINT_ENUM, "Perspective,Orthogonal,Frustum"), "set_projection", "get_projection");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "current"), "set_current", "is_current");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_custom_projection"), "set_use_custom_projection", "is_using_custom_projection");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "fov", PROPERTY_HINT_RANGE, "1,179,0.1,degrees"), "set_fov", "get_fov");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "size", PROPERTY_HINT_RANGE, "0.001,100,0.001,or_greater,suffix:m"), "set_size", "get_size");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "frustum_offset", PROPERTY_HINT_NONE, "suffix:m"), "set_frustum_offset", "get_frustum_offset");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "near", PROPERTY_HINT_RANGE, "0.001,10,0.001,or_greater,exp,suffix:m"), "set_near", "get_near");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "far", PROPERTY_HINT_RANGE, "0.01,4000,0.01,or_greater,exp,suffix:m"), "set_far", "get_far");
+	ADD_PROPERTY(PropertyInfo(Variant::PROJECTION, "custom_projection"), "set_custom_projection", "get_custom_projection");
 
 	BIND_ENUM_CONSTANT(PROJECTION_PERSPECTIVE);
 	BIND_ENUM_CONSTANT(PROJECTION_ORTHOGONAL);
@@ -604,6 +623,10 @@ real_t Camera3D::get_near() const {
 
 Vector2 Camera3D::get_frustum_offset() const {
 	return frustum_offset;
+}
+
+Projection Camera3D::get_custom_projection() const {
+	return custom_projection;
 }
 
 real_t Camera3D::get_far() const {
@@ -639,6 +662,15 @@ void Camera3D::set_frustum_offset(Vector2 p_offset) {
 void Camera3D::set_far(real_t p_far) {
 	_far = p_far;
 	_update_camera_mode();
+}
+
+void Camera3D::set_custom_projection(Projection p_projection) {
+	custom_projection = p_projection;
+	if (use_custom_projection) {
+		RenderingServer::get_singleton()->camera_set_custom_projection(camera, custom_projection);
+	} else {
+		RenderingServer::get_singleton()->camera_set_custom_projection(camera, Projection());
+	}
 }
 
 void Camera3D::set_cull_mask(uint32_t p_layers) {
