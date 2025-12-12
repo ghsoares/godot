@@ -22,6 +22,8 @@ struct InstanceData {
 	vec2 world_x;
 	vec2 world_y;
 	vec2 world_ofs;
+	vec2 draw_rect_position;
+	vec2 draw_rect_size;
 	uint flags;
 	uint instance_uniforms_ofs;
 #ifdef USE_PRIMITIVE

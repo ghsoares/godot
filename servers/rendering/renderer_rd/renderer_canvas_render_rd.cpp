@@ -1766,6 +1766,7 @@ RendererCanvasRenderRD::RendererCanvasRenderRD() {
 		actions.renames["POINT_SIZE"] = "point_size";
 
 		actions.renames["MODEL_MATRIX"] = "model_matrix";
+		actions.renames["DRAW_RECT"] = "draw_rect";
 		actions.renames["CANVAS_MATRIX"] = "canvas_data.canvas_transform";
 		actions.renames["SCREEN_MATRIX"] = "canvas_data.screen_transform";
 		actions.renames["TIME"] = "canvas_data.time";
@@ -2292,6 +2293,7 @@ RendererCanvasRenderRD::InstanceData *RendererCanvasRenderRD::new_instance_data(
 	// Zero out most fields.
 	for (int i = 0; i < 4; i++) {
 		instance_data->modulation[i] = 0.0;
+		instance_data->draw_rect[i] = 0.0;
 		instance_data->ninepatch_margins[i] = 0.0;
 		instance_data->src_rect[i] = 0.0;
 		instance_data->dst_rect[i] = 0.0;
@@ -2495,6 +2497,11 @@ void RendererCanvasRenderRD::_record_item_commands(const Item *p_item, RenderTar
 				instance_data->modulation[2] = modulated.b;
 				instance_data->modulation[3] = modulated.a;
 
+				instance_data->draw_rect[0] = rect->rect.position.x;
+				instance_data->draw_rect[1] = rect->rect.position.y;
+				instance_data->draw_rect[2] = rect->rect.size.x;
+				instance_data->draw_rect[3] = rect->rect.size.y;
+
 				instance_data->src_rect[0] = src_rect.position.x;
 				instance_data->src_rect[1] = src_rect.position.y;
 				instance_data->src_rect[2] = src_rect.size.width;
@@ -2560,6 +2567,11 @@ void RendererCanvasRenderRD::_record_item_commands(const Item *p_item, RenderTar
 				instance_data->modulation[2] = modulated.b;
 				instance_data->modulation[3] = modulated.a;
 
+				instance_data->draw_rect[0] = np->rect.position.x;
+				instance_data->draw_rect[1] = np->rect.position.y;
+				instance_data->draw_rect[2] = np->rect.size.x;
+				instance_data->draw_rect[3] = np->rect.size.y;
+
 				instance_data->src_rect[0] = src_rect.position.x;
 				instance_data->src_rect[1] = src_rect.position.y;
 				instance_data->src_rect[2] = src_rect.size.width;
@@ -2622,6 +2634,11 @@ void RendererCanvasRenderRD::_record_item_commands(const Item *p_item, RenderTar
 					color = color.srgb_to_linear();
 				}
 
+				instance_data->draw_rect[0] = polygon->polygon.rect_cache.position.x;
+				instance_data->draw_rect[1] = polygon->polygon.rect_cache.position.y;
+				instance_data->draw_rect[2] = polygon->polygon.rect_cache.size.x;
+				instance_data->draw_rect[3] = polygon->polygon.rect_cache.size.y;
+
 				instance_data->modulation[0] = color.r;
 				instance_data->modulation[1] = color.g;
 				instance_data->modulation[2] = color.b;
@@ -2675,7 +2692,22 @@ void RendererCanvasRenderRD::_record_item_commands(const Item *p_item, RenderTar
 					r_current_batch->tex_info = tex_info;
 				}
 
+				Vector2 rect_min = primitive->points[0];
+				Vector2 rect_max = primitive->points[0];
+				rect_min = rect_min.min(primitive->points[1]);
+				rect_min = rect_min.min(primitive->points[2]);
+				rect_min = rect_min.min(primitive->points[3]);
+				rect_max = rect_max.min(primitive->points[1]);
+				rect_max = rect_max.min(primitive->points[2]);
+				rect_max = rect_max.min(primitive->points[3]);
+				Rect2 rect = Rect2(rect_min, rect_max - rect_min);
+
 				InstanceData *instance_data = new_instance_data(world, lights, base_flags, r_index, uniforms_ofs, tex_info);
+
+				instance_data->draw_rect[0] = rect.position.x;
+				instance_data->draw_rect[1] = rect.position.y;
+				instance_data->draw_rect[2] = rect.size.x;
+				instance_data->draw_rect[3] = rect.size.y;
 
 				for (uint32_t j = 0; j < MIN(3u, primitive->point_count); j++) {
 					instance_data->points[j * 2 + 0] = primitive->points[j].x;
@@ -2694,6 +2726,11 @@ void RendererCanvasRenderRD::_record_item_commands(const Item *p_item, RenderTar
 
 				if (primitive->point_count == 4) {
 					instance_data = new_instance_data(world, lights, base_flags, r_index, uniforms_ofs, tex_info);
+
+					instance_data->draw_rect[0] = rect.position.x;
+					instance_data->draw_rect[1] = rect.position.y;
+					instance_data->draw_rect[2] = rect.size.x;
+					instance_data->draw_rect[3] = rect.size.y;
 
 					for (uint32_t j = 0; j < 3; j++) {
 						int offset = j == 0 ? 0 : 1;

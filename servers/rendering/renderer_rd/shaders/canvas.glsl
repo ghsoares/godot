@@ -69,6 +69,7 @@ void main() {
 	instance_index = gl_InstanceIndex + params.base_instance_index;
 #endif // USE_ATTRIBUTES
 	const InstanceData draw_data = instances.data[instance_index];
+	vec4 draw_rect = vec4(draw_data.draw_rect_position, draw_data.draw_rect_size);
 
 #ifdef USE_PRIMITIVE
 

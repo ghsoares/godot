@@ -351,6 +351,7 @@ class RendererCanvasRenderRD : public RendererCanvasRender {
 
 	struct InstanceData {
 		float world[6];
+		float draw_rect[4];
 		uint32_t flags;
 		uint32_t instance_uniforms_ofs;
 		union {
